@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import br.com.claro.whatsapp.tracking.service.TrackingService;
 public class TrackingResource {
 	
 	private static final String CONTENT_TYPE_TEXT_CSV = "text/csv";
+	private static final String CONTENT_TYPE_JSON = "application/json";
 	
   	private TrackingService service;
   	
@@ -40,9 +42,10 @@ public class TrackingResource {
 		return ResponseEntity.ok().build();
     }
     
-    @PostMapping
-    public void recordNewTrackingEntry(@RequestBody Tracking tracking) {
-    	service.recordNewTrackingEntry(tracking);
+    @PostMapping(produces = CONTENT_TYPE_JSON)
+    public ResponseEntity<Tracking> recordNewTrackingEntry(@RequestBody Tracking tracking) {
+    	Tracking trackingEntry = service.recordNewTrackingEntry(tracking);
+		return ResponseEntity.status(HttpStatus.CREATED).body(trackingEntry);
 	}
     
 }

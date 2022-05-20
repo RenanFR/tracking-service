@@ -11,11 +11,13 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="tracking")
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class TrackingEntity {
 	
     @Id

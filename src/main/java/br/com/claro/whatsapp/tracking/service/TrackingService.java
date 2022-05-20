@@ -60,9 +60,10 @@ public class TrackingService {
 
 	}
 
-	public void recordNewTrackingEntry(Tracking tracking) {
+	public Tracking recordNewTrackingEntry(Tracking tracking) {
 		TrackingEntity entity = mapper.recordToEntity(tracking);
-		repository.save(entity);
+		TrackingEntity savedTracking = repository.save(entity);
+		return mapper.entityToRecord(savedTracking);
 	}
 
 }
