@@ -26,13 +26,17 @@ public class TrackingService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TrackingService.class);
 
-	@Autowired
 	private TrackingRepository repository;
 
-	@Autowired
 	private TrackingMapper mapper;
+	
+	@Autowired
+	public TrackingService(TrackingRepository repository, TrackingMapper mapper) {
+		this.repository = repository;
+		this.mapper = mapper;
+	}
 
-	public void fetchFromPeriod(PrintWriter writer, LocalDateTime from, LocalDateTime to) {
+	public List<Tracking> fetchFromPeriod(PrintWriter writer, LocalDateTime from, LocalDateTime to) {
 		List<TrackingEntity> entities = repository.findByRecordDateBetween(from, to);
 		List<Tracking> trackingList = entities.stream().map(mapper::entityToRecord).collect(Collectors.toList());
 
@@ -52,9 +56,10 @@ public class TrackingService {
 
             LOGGER.error(csvException.getMessage());
         }
+		return trackingList;
 
 	}
-	
+
 	public void recordNewTrackingEntry(Tracking tracking) {
 		TrackingEntity entity = mapper.recordToEntity(tracking);
 		repository.save(entity);

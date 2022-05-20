@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,16 +19,25 @@ import br.com.claro.whatsapp.tracking.model.Tracking;
 import br.com.claro.whatsapp.tracking.service.TrackingService;
 
 @RestController
-@RequestMapping("trackings")
+@RequestMapping(path = { "trackings" })
 public class TrackingResource {
 	
-	@Autowired
-  	private TrackingService service;
+	private static final String CONTENT_TYPE_TEXT_CSV = "text/csv";
 	
-    @GetMapping(produces = "text/csv")
-    public void fetchFromPeriod(@RequestParam("from") LocalDateTime from, @RequestParam("to") LocalDateTime to, 
+  	private TrackingService service;
+  	
+  	@Autowired
+  	public TrackingResource(TrackingService service) {
+  		this.service = service;
+	}
+	
+    @GetMapping(produces = CONTENT_TYPE_TEXT_CSV)
+    public ResponseEntity<Void> fetchFromPeriod(@RequestParam("from") @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime from, 
+    		@RequestParam("to") @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime to, 
     		HttpServletResponse response) throws IOException {
+    	response.setContentType(CONTENT_TYPE_TEXT_CSV);
     	service.fetchFromPeriod(response.getWriter(), from, to);
+		return ResponseEntity.ok().build();
     }
     
     @PostMapping
