@@ -44,7 +44,7 @@ public class TrackingService {
 			
 			ColumnPositionMappingStrategy<Tracking> mappingStrategy = new ColumnPositionMappingStrategy<>();
 			mappingStrategy.setType(Tracking.class);
-			String[] columns = new String[] { "chatbotId", "originalUserId", "globalExtras", "userPhone", "campaignSource",
+			String[] columns = new String[] { "chatbotId", "originalUserId", "globalExtrasRaw", "userPhone", "campaignSource",
 					"category", "recordDate" };
 			mappingStrategy.setColumnMapping(columns);
 			StatefulBeanToCsv<Tracking> toCsv = new StatefulBeanToCsvBuilder<Tracking>(writer)

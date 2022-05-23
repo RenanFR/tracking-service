@@ -17,17 +17,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.claro.whatsapp.tracking.config.ObjectMapperConfig;
+import br.com.claro.whatsapp.tracking.mapper.TrackingMapper;
 import br.com.claro.whatsapp.tracking.mapper.TrackingMapperImpl;
+import br.com.claro.whatsapp.tracking.persistence.entity.GlobalExtrasEntity;
 import br.com.claro.whatsapp.tracking.persistence.entity.TrackingEntity;
 import br.com.claro.whatsapp.tracking.persistence.repository.TrackingRepository;
 import br.com.claro.whatsapp.tracking.resource.TrackingResource;
 import br.com.claro.whatsapp.tracking.service.TrackingService;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {ObjectMapperConfig.class, TrackingMapperImpl.class})
 public class TrackingCsvTest {
 
 	private static final String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm";
@@ -35,21 +43,30 @@ public class TrackingCsvTest {
 	@Mock
 	private TrackingRepository repository;
 	
+	@Mock
+	private ObjectMapper objectMapper;
+	
 	private MockMvc mockMvc;
 	
 	private TrackingService service;
 	
+	@Autowired
+	private TrackingMapper trackingMapper;
+	
     @Before
     public void setup() throws Exception {
-    	service = new TrackingService(repository, new TrackingMapperImpl());
+    	service = new TrackingService(repository, trackingMapper);
     	TrackingResource controller = new TrackingResource(service);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
 	@Test
 	public void shouldDownloadTrackingCsv() throws Exception {
+    	
+		String globalExtrasRaw = "{ \"city\":\"São Paulo\", \"bot-origin\":null, \"campaign-source\":\"site\", \"lastState\":\"planSelectionTVAvailablePlansOptionsOthersUnexpectedInput\", \"main-installation-date\":null, \"userid\":\"b3e73880-594c-4d60-8db1-4f2fd6ca05a2@tunnel.msging.net\", \"full-name\":null, \"alternative-installation-date\":null, \"chosen-product\":\"TV\", \"bank\":null, \"postalcode\":\"04523001\", \"due-date\":null, \"cpf\":\"17438929850\", \"origin-link\":\"https://www.claro.com.br/internet\", \"payment\":null, \"state\":\"SP\", \"api-orders-hash-id\":null, \"email\":null, \"plan-name\":null, \"userphone\":\"86 78403-61  \", \"plan-offer\":null, \"completed-address\":\"04523001 - AV MACUCO, 404 - MOEMA, São Paulo - SP\", \"type-of-person\":\"CPF\", \"type-of-product\":\"Residencial\", \"main-installation-period-day\":null, \"plan-value\":null, \"alternative-installation-period-day\":null }";
+		GlobalExtrasEntity globalExtrasEntity = trackingMapper.fromJsonToGlobalExtrasEntity(globalExtrasRaw);
 		
-		List<TrackingEntity> trackingList = List.of(new TrackingEntity(1L, "claroresidentialsales@msging.net", "17867840361@wa.gw.msging.net", "{ &quot;city&quot;:&quot;São Paulo&quot;, &quot;bot-origin&quot;:null, &quot;campaign-source&quot;:&quot;site&quot;, &quot;lastState&quot;:&quot;planSelectionTVAvailablePlansOptionsOthersUnexpectedInput&quot;, &quot;main-installation-date&quot;:null, &quot;userid&quot;:&quot;b3e73880-594c-4d60-8db1-4f2fd6ca05a2@tunnel.msging.net&quot;, &quot;full-name&quot;:null, &quot;alternative-installation-date&quot;:null, &quot;chosen-product&quot;:&quot;TV&quot;, &quot;bank&quot;:null, &quot;postalcode&quot;:&quot;04523001&quot;, &quot;due-date&quot;:null, &quot;cpf&quot;:&quot;17438929850&quot;, &quot;origin-link&quot;:&quot;https://www.claro.com.br/internet&quot;, &quot;payment&quot;:null, &quot;state&quot;:&quot;SP&quot;, &quot;api-orders-hash-id&quot;:null, &quot;email&quot;:null, &quot;plan-name&quot;:null, &quot;userphone&quot;:&quot;86 78403-61  &quot;, &quot;plan-offer&quot;:null, &quot;completed-address&quot;:&quot;04523001 - AV MACUCO, 404 - MOEMA, São Paulo - SP&quot;, &quot;type-of-person&quot;:&quot;CPF&quot;, &quot;type-of-product&quot;:&quot;Residencial&quot;, &quot;main-installation-period-day&quot;:null, &quot;plan-value&quot;:null, &quot;alternative-installation-period-day&quot;:null }", "17867840361", "plan-selection tv-available-plans-options-others view", "site", LocalDateTime.now()));
+		List<TrackingEntity> trackingList = List.of(new TrackingEntity(1L, "claroresidentialsales@msging.net", null, "17867840361@wa.gw.msging.net", globalExtrasRaw, "17867840361", "plan-selection tv-available-plans-options-others", null, "view", "site", LocalDateTime.now(), globalExtrasEntity));
 		
 		LocalDateTime fromDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
 		LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59));

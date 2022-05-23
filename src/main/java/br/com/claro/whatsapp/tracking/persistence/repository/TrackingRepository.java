@@ -10,5 +10,7 @@ import br.com.claro.whatsapp.tracking.persistence.entity.TrackingEntity;
 public interface TrackingRepository extends JpaRepository<TrackingEntity, Long> {
 	
 	List<TrackingEntity> findByRecordDateBetween(LocalDateTime from, LocalDateTime to);
+	
+	List<TrackingEntity> findByRecordDate(LocalDateTime recordDate);
 
 }

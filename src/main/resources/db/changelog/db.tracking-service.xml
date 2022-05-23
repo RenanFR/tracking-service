@@ -13,25 +13,94 @@
 					primaryKeyName="tracking_id_pk" />
 			</column>
 			<column name="chatbot_id" type="varchar(250)" />
+			<column name="session_id" type="varchar(250)" />
 			<column name="original_user_id" type="varchar(250)" />
-			<column name="global_extras" type="json" />
+			<column name="global_extras_raw" type="json" />
 			<column name="user_phone" type="varchar(250)" />
 			<column name="category" type="varchar(250)" />
+			<column name="type" type="varchar(250)" />
+			<column name="suffix" type="varchar(250)" />
 			<column name="campaign_source" type="varchar(250)" />
 			<column name="record_date" type="datetime" />
+			<column name="global_extras_id" type="bigint" />
 		</createTable>
 		
 		<addAutoIncrement tableName="tracking" columnName="id"
-			columnDataType="bigint" startWith="1" incrementBy="1" />		
+			columnDataType="bigint" startWith="1" incrementBy="1" />	
+				
+		<createTable tableName="global_extras">
+			<column name="id" type="bigint">
+				<constraints primaryKey="true"
+					primaryKeyName="global_extras_id_pk" />
+			</column>
+			<column name="city" type="varchar(250)" />
+			<column name="bot_origin" type="varchar(250)" />
+			<column name="campaign_source" type="varchar(250)" />
+			<column name="last_state" type="varchar(250)" />
+			<column name="main_installation_date" type="datetime" />
+			<column name="user_id" type="varchar(250)" />
+			<column name="full_name" type="varchar(250)" />
+			<column name="alternative_installation_date" type="datetime" />
+			<column name="chosen_product" type="varchar(250)" />
+			<column name="bank" type="varchar(250)" />
+			<column name="postal_code" type="varchar(250)" />
+			<column name="due_date" type="datetime" />
+			<column name="cpf" type="varchar(250)" />
+			<column name="origin_link" type="varchar(250)" />
+			<column name="payment" type="varchar(250)" />
+			<column name="state" type="varchar(250)" />
+			<column name="api_orders_hash_id" type="varchar(250)" />
+			<column name="email" type="varchar(250)" />
+			<column name="api_orders_error" type="varchar(250)" />
+			<column name="plan_name" type="varchar(250)" />
+			<column name="user_phone" type="varchar(250)" />
+			<column name="plan_offer" type="varchar(250)" />
+			<column name="completed_address" type="varchar(250)" />
+			<column name="type_of_person" type="varchar(250)" />
+			<column name="onboarding_simplified" type="varchar(250)" />
+			<column name="type_of_product" type="varchar(250)" />
+			<column name="main_installation_period_day" type="varchar(250)" />
+			<column name="plan_value" type="int" />
+			<column name="alternative_installation_period_day" type="varchar(250)" />
+		</createTable>
+		
+		<addAutoIncrement tableName="global_extras" columnName="id"
+			columnDataType="bigint" startWith="1" incrementBy="1" />	
+			
+		<addForeignKeyConstraint
+			baseColumnNames="global_extras_id" baseTableName="tracking"
+			constraintName="fk_tracking_global_extras" referencedColumnNames="id"
+			referencedTableName="global_extras" />				
+		
+		<insert schemaName="public" tableName="global_extras">
+			<column name="city" value="São Paulo" />
+			<column name="campaign_source" value="site" />
+			<column name="last_state" value="planSelectionTVAvailablePlansOptionsOthersUnexpectedInput" />
+			<column name="user_id" value="b3e73880-594c-4d60-8db1-4f2fd6ca05a2@tunnel.msging.net" />
+			<column name="chosen_product" value="TV" />
+			<column name="postal_code" value="04523001" />
+			<column name="cpf" value="17438929850" />
+			<column name="origin_link" value="https://www.claro.com.br/internet" />
+			<column name="state" value="SP" />
+			<column name="user_phone" value="86 78403-61" />
+			<column name="completed_address" value="04523001 - AV MACUCO, 404 - MOEMA, São Paulo - SP" />
+			<column name="type_of_person" value="CPF" />
+			<column name="type_of_product" value="Residencial" />
+		</insert>
 		
 		<insert schemaName="public" tableName="tracking">
 			<column name="chatbot_id" value="claroresidentialsales@msging.net" />
+			<column name="session_id" value="" />
 			<column name="original_user_id" value="17867840361@wa.gw.msging.net" />
-			<column name="global_extras" value="{ &quot;city&quot;:&quot;São Paulo&quot;, &quot;bot-origin&quot;:null, &quot;campaign-source&quot;:&quot;site&quot;, &quot;lastState&quot;:&quot;planSelectionTVAvailablePlansOptionsOthersUnexpectedInput&quot;, &quot;main-installation-date&quot;:null, &quot;userid&quot;:&quot;b3e73880-594c-4d60-8db1-4f2fd6ca05a2@tunnel.msging.net&quot;, &quot;full-name&quot;:null, &quot;alternative-installation-date&quot;:null, &quot;chosen-product&quot;:&quot;TV&quot;, &quot;bank&quot;:null, &quot;postalcode&quot;:&quot;04523001&quot;, &quot;due-date&quot;:null, &quot;cpf&quot;:&quot;17438929850&quot;, &quot;origin-link&quot;:&quot;https://www.claro.com.br/internet&quot;, &quot;payment&quot;:null, &quot;state&quot;:&quot;SP&quot;, &quot;api-orders-hash-id&quot;:null, &quot;email&quot;:null, &quot;plan-name&quot;:null, &quot;userphone&quot;:&quot;86 78403-61  &quot;, &quot;plan-offer&quot;:null, &quot;completed-address&quot;:&quot;04523001 - AV MACUCO, 404 - MOEMA, São Paulo - SP&quot;, &quot;type-of-person&quot;:&quot;CPF&quot;, &quot;type-of-product&quot;:&quot;Residencial&quot;, &quot;main-installation-period-day&quot;:null, &quot;plan-value&quot;:null, &quot;alternative-installation-period-day&quot;:null }" />
+			<column name="global_extras_raw" value="{ &quot;city&quot;:&quot;São Paulo&quot;, &quot;bot-origin&quot;:null, &quot;campaign-source&quot;:&quot;site&quot;, &quot;lastState&quot;:&quot;planSelectionTVAvailablePlansOptionsOthersUnexpectedInput&quot;, &quot;main-installation-date&quot;:null, &quot;userid&quot;:&quot;b3e73880-594c-4d60-8db1-4f2fd6ca05a2@tunnel.msging.net&quot;, &quot;full-name&quot;:null, &quot;alternative-installation-date&quot;:null, &quot;chosen-product&quot;:&quot;TV&quot;, &quot;bank&quot;:null, &quot;postalcode&quot;:&quot;04523001&quot;, &quot;due-date&quot;:null, &quot;cpf&quot;:&quot;17438929850&quot;, &quot;origin-link&quot;:&quot;https://www.claro.com.br/internet&quot;, &quot;payment&quot;:null, &quot;state&quot;:&quot;SP&quot;, &quot;api-orders-hash-id&quot;:null, &quot;email&quot;:null, &quot;plan-name&quot;:null, &quot;userphone&quot;:&quot;86 78403-61  &quot;, &quot;plan-offer&quot;:null, &quot;completed-address&quot;:&quot;04523001 - AV MACUCO, 404 - MOEMA, São Paulo - SP&quot;, &quot;type-of-person&quot;:&quot;CPF&quot;, &quot;type-of-product&quot;:&quot;Residencial&quot;, &quot;main-installation-period-day&quot;:null, &quot;plan-value&quot;:null, &quot;alternative-installation-period-day&quot;:null }" />
 			<column name="user_phone" value="17867840361" />
-			<column name="category" value="plan-selection tv-available-plans-options-others view" />
+			<column name="category" value="plan-selection tv-available-plans-options-others" />
+			<column name="type" value="" />
+			<column name="suffix" value="view" />
 			<column name="campaign_source" value="site" />
 			<column name="record_date" valueDate="now()"></column>
+			<column name="global_extras_id" valueComputed="select id from global_extras limit 1" />
 		</insert>
+		
 	</changeSet>
 </databaseChangeLog>
