@@ -22,12 +22,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.claro.whatsapp.tracking.blip.BlipClient;
 import br.com.claro.whatsapp.tracking.config.ObjectMapperConfig;
 import br.com.claro.whatsapp.tracking.mapper.TrackingMapper;
 import br.com.claro.whatsapp.tracking.mapper.TrackingMapperImpl;
 import br.com.claro.whatsapp.tracking.persistence.entity.TrackingEntity;
 import br.com.claro.whatsapp.tracking.persistence.repository.TrackingRepository;
 import br.com.claro.whatsapp.tracking.resource.TrackingResource;
+import br.com.claro.whatsapp.tracking.service.AWSS3Service;
 import br.com.claro.whatsapp.tracking.service.TrackingService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,6 +38,12 @@ public class TrackingPersistenceTest {
 
 	@Mock
 	private TrackingRepository repository;
+	
+	@Mock
+	private BlipClient blipClient;
+	
+	@Mock
+	private AWSS3Service s3Service;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -49,7 +57,7 @@ public class TrackingPersistenceTest {
 	
     @Before
     public void setup() throws Exception {
-    	service = new TrackingService(repository, trackingMapper);
+    	service = new TrackingService(repository, trackingMapper, blipClient, s3Service);
     	TrackingResource controller = new TrackingResource(service);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
