@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.claro.whatsapp.tracking.model.BlipResponse;
 
-@FeignClient(value = "blip", url = "https://claro.http.msging.net")
+@FeignClient(value = "blip", url = "${blip.url}")
 public interface BlipClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/commands")

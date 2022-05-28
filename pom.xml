@@ -97,6 +97,18 @@
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.discord4j/discord4j-core -->
+		<dependency>
+		    <groupId>com.discord4j</groupId>
+		    <artifactId>discord4j-core</artifactId>
+		    <version>3.2.2</version>
+		</dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>2.27.2</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>

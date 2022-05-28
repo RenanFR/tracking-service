@@ -15,7 +15,7 @@ public class AWSS3Service {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AWSS3Service.class);
 	
-	private static final String BUCKET_NAME = "tracking_csv_bucket";
+	private static final String BUCKET_NAME = "tracking-csv-bucket";
 	
 	private final AmazonS3 s3;
 	

@@ -21,16 +21,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class SqsConfig {
-	
+
 	@Value("${aws.sqs.serviceEndpoint}")
 	private String serviceEndpoint;
-	
+
 	@Value("${aws.sqs.signingRegion}")
 	private String signingRegion;
-	
+
 	@Value("${aws.sqs.accessKey}")
 	private String accessKey;
-	
+
 	@Value("${aws.sqs.secretKey}")
 	private String secretKey;
 

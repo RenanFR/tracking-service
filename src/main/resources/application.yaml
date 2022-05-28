@@ -14,7 +14,7 @@ cloud:
   aws:
     stack.auto: false
     region:
-      static: us-east-1
+      static: eu-central-1
       
 aws:
   sqs:
@@ -22,3 +22,14 @@ aws:
     signingRegion: eu-central-1
     accessKey: foo
     secretKey: bar
+    
+blip:
+  url: https://claro.http.msging.net
+  key: Key c2FsZXNobWc6N3NsSnZsQ21WUWRndE1leFoydko=
+    
+discord:
+  token: OTc5NzM5MzA2ODY2MzkzMTQ4.G1SLmU.K4owlPKtNvNyrmBIIWuhVYNdvLUIzBypT2RPBs
+  
+logging:
+  level:
+    br.com.claro.whatsapp.tracking.blip.BlipClient: DEBUG  

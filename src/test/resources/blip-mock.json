@@ -1,0 +1,72 @@
+{
+	"id": "b4ee9374-de23-11ec-9d64-0242ac120002",
+	"name": "Blip Commands",
+	"request": {
+		"urlPath": "/commands",
+		"method": "POST",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"id": "aa194d39-610c-4f0f-a194-89af4b9bd146",
+					"to": "postmaster@analytics.msging.net",
+					"method": "set",
+					"uri": "/event-track",
+					"type": "application/vnd.iris.eventTrack+json",
+					"resource": {
+						"category": "decision-tree exceeded-attempt-limit input",
+						"action": "",
+						"label": "11 94361-5412",
+						"extras": {
+							"city": null,
+							"bot-origin": null,
+							"campaign-source": "undefined-origin",
+							"lastState": "onboardingSegmentConfirmation",
+							"main-installation-date": null,
+							"userid": "f53ee94b-b483-426f-b4a4-a3ca7d427616@tunnel.msging.net",
+							"full-name": null,
+							"alternative-installation-date": null,
+							"chosen-product": null,
+							"bank": null,
+							"postalcode": null,
+							"due-date": null,
+							"cpf": null,
+							"origin-link": "",
+							"payment": null,
+							"state": null,
+							"api-orders-hash-id": null,
+							"email": null,
+							"api-orders-error": null,
+							"plan-name": null,
+							"userphone": "11 94361-5412",
+							"plan-offer": null,
+							"completed-address": null,
+							"type-of-person": null,
+							"onboarding-simplified": null,
+							"type-of-product": "Residencial",
+							"main-installation-period-day": null,
+							"plan-value": null,
+							"alternative-installation-period-day": null
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200,
+		"jsonBody": {
+			"method": "set",
+			"status": "success",
+			"id": "aa194d39-610c-4f0f-a194-89af4b9bd146",
+			"from": "postmaster@analytics.msging.net/#dalmata-iris4",
+			"to": "saleshmg@msging.net/!dalmata-iris4-32n92m5e",
+			"metadata": {
+				"commandUri": null,
+				"uberTraceId": null
+			}
+		},
+		"headers": {
+			"Content-Type": "application/json"
+		}
+	}
+}

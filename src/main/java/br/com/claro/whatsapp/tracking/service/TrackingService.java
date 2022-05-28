@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
@@ -88,6 +90,13 @@ public class TrackingService {
 	
 	public BlipResponse sendTrackingToBlip(String request) {
 		BlipResponse response = blipClient.postTracking(request);
+		try {
+			String writeValueAsString = new ObjectMapper().writeValueAsString(response);
+			request.chars();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return response;
 	}
 	
