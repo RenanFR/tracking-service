@@ -5,6 +5,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,34 +25,31 @@ import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemp
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import br.com.claro.whatsapp.tracking.blip.BlipClient;
-import br.com.claro.whatsapp.tracking.config.CloudConfig;
 import br.com.claro.whatsapp.tracking.config.FeignConfig;
 import br.com.claro.whatsapp.tracking.config.ObjectMapperConfig;
 import br.com.claro.whatsapp.tracking.exception.FeignErrorDecoder;
 import br.com.claro.whatsapp.tracking.mapper.TrackingMapper;
 import br.com.claro.whatsapp.tracking.mapper.TrackingMapperImpl;
+import br.com.claro.whatsapp.tracking.model.BlipResponse;
 import br.com.claro.whatsapp.tracking.persistence.repository.TrackingRepository;
 import br.com.claro.whatsapp.tracking.service.AWSS3Service;
 import br.com.claro.whatsapp.tracking.service.TrackingService;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@SpringBootTest(classes = { ObjectMapperConfig.class, TrackingMapperImpl.class, CloudConfig.class, FeignConfig.class,
+@SpringBootTest(classes = { ObjectMapperConfig.class, TrackingMapperImpl.class, FeignConfig.class,
 		FeignErrorDecoder.class })
 public class TrackingServiceTest {
 
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule(
 			options().port(2345).extensions(new ResponseTemplateTransformer(false)).notifier(new Slf4jNotifier(false)));
-	
-    @Before
-    public void setUp() {
-    	stubFor(post(urlEqualTo("/commands"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("sample-blip-response.json")
-                ));
-    }
+
+	@Before
+	public void setUp() {
+		stubFor(post(urlEqualTo("/commands")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json").withBodyFile("sample-blip-response.json")));
+	}
 
 	private TrackingService service;
 
@@ -75,7 +73,8 @@ public class TrackingServiceTest {
 	@Test
 	public void shouldIntegrateTrackingWithBlip() throws Exception {
 		String request = new String(Files.readAllBytes(Paths.get("src/test/resources/sample-blip-request.json")));
-		service.sendTrackingToBlip(request);
+		BlipResponse blipResponse = service.sendTrackingToBlip(request);
+		assertEquals(blipResponse.status(), "success");
 	}
 
 }

@@ -33,45 +33,44 @@ import br.com.claro.whatsapp.tracking.service.AWSS3Service;
 import br.com.claro.whatsapp.tracking.service.TrackingService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ObjectMapperConfig.class, TrackingMapperImpl.class})
+@ContextConfiguration(classes = { ObjectMapperConfig.class, TrackingMapperImpl.class })
 public class TrackingPersistenceTest {
 
 	@Mock
 	private TrackingRepository repository;
-	
+
 	@Mock
 	private BlipClient blipClient;
-	
+
 	@Mock
 	private AWSS3Service s3Service;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	@Autowired
 	private TrackingMapper trackingMapper;
-	
+
 	private MockMvc mockMvc;
-	
+
 	private TrackingService service;
-	
-    @Before
-    public void setup() throws Exception {
-    	service = new TrackingService(repository, trackingMapper, blipClient, s3Service);
-    	TrackingResource controller = new TrackingResource(service);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    }
+
+	@Before
+	public void setup() throws Exception {
+		service = new TrackingService(repository, trackingMapper, blipClient, s3Service);
+		TrackingResource controller = new TrackingResource(service);
+		this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	}
 
 	@Test
 	public void shouldDownloadTrackingCsv() throws Exception {
 		String json = new String(Files.readAllBytes(Paths.get("src/test/resources/sample-tracking-record.json")));
-		
+
 		TrackingEntity entity = objectMapper.readValue(json, TrackingEntity.class);
-		
+
 		when(repository.save(any(TrackingEntity.class))).thenReturn(entity);
-		
-		this.mockMvc.perform(post("/trackings").contentType(MediaType.APPLICATION_JSON).content(json))
-				.andDo(print())
+
+		this.mockMvc.perform(post("/trackings").contentType(MediaType.APPLICATION_JSON).content(json)).andDo(print())
 				.andExpect(MockMvcResultMatchers.status().isCreated())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.chatbotId").value("claroresidentialsales@msging.net"));
 	}

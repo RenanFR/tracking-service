@@ -66,7 +66,9 @@ public class TrackingSchedule {
 			String fileName = trackingCsvKey + ".csv";
 
 			service.uploadTrackingCsv(fileName, file);
-			trackingBot.notifyNewTrackingReport();
+			
+			String presignedForUrlTrackingCsv = service.getPresignedForUrlTrackingCsv(fileName);
+			trackingBot.notifyNewTrackingReport(presignedForUrlTrackingCsv);
 		}
 
 	}

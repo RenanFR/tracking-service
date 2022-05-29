@@ -2,6 +2,7 @@ package br.com.claro.whatsapp.tracking;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -16,6 +17,8 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.amazonaws.services.s3.AmazonS3;
 
 import br.com.claro.whatsapp.tracking.blip.BlipClient;
 import br.com.claro.whatsapp.tracking.config.ObjectMapperConfig;
@@ -46,6 +49,9 @@ public class TrackingScheduleIntegrationTest {
 	private AWSS3Service s3Service;
 
 	@Mock
+	private AmazonS3 s3;
+
+	@Mock
 	private DiscordTrackingBot trackingBot;
 
 	@Before
@@ -57,11 +63,13 @@ public class TrackingScheduleIntegrationTest {
 	@Test
 	public void shouldUploadCsvTrackingToS3AndSendMessageToDiscord()
 			throws InterruptedException, IOException, URISyntaxException {
-		
+
 		trackingSchedule.uploadCsvTrackingToS3();
 
-		verify(s3Service, times(1)).upload(eq("trackings_27-05-2022 00.00_27-05-2022 23.59.csv"), any(File.class));
-		verify(trackingBot, times(1)).notifyNewTrackingReport();
+		String trackingCsvKey = "trackings_27-05-2022 00.00_27-05-2022 23.59.csv";
+
+		verify(s3Service, times(1)).upload(eq(trackingCsvKey), any(File.class));
+		verify(trackingBot, times(1)).notifyNewTrackingReport(isNull());
 	}
 
 }
