@@ -25,10 +25,8 @@ aws:
     
 blip:
   url: https://claro.http.msging.net
-  key: Key c2FsZXNobWc6N3NsSnZsQ21WUWRndE1leFoydko=
     
 discord:
-  token: OTc5NzM5MzA2ODY2MzkzMTQ4.G1SLmU.K4owlPKtNvNyrmBIIWuhVYNdvLUIzBypT2RPBs
   channelId: 980498952946339890
   inviteLink: https://discord.com/api/oauth2/authorize?client_id=979739306866393148&permissions=380104621072&scope=applications.commands%20bot
   
