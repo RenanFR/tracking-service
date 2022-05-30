@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({ "br.com.claro.whatsapp.tracking.config" })
 public class TrackingServiceApplication {
 
 	public static void main(String[] args) {
