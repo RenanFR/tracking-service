@@ -1,8 +1,12 @@
 package br.com.claro.whatsapp.tracking.service;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +28,7 @@ import br.com.claro.whatsapp.tracking.model.BlipResponse;
 import br.com.claro.whatsapp.tracking.model.Tracking;
 import br.com.claro.whatsapp.tracking.persistence.entity.TrackingEntity;
 import br.com.claro.whatsapp.tracking.persistence.repository.TrackingRepository;
+import br.com.claro.whatsapp.tracking.service.aws.AWSS3Service;
 
 @Service
 public class TrackingService {
@@ -97,6 +102,25 @@ public class TrackingService {
 	public String getPresignedForUrlTrackingCsv(String trackingCsvKey) {
 		String presignedForUrlTrackingCsv = s3Service.getPresignedForUrlTrackingCsv(trackingCsvKey);
 		return presignedForUrlTrackingCsv;
+	}
+	
+	public String fetchTrackingsAndUploadFileToS3(LocalDateTime initialPeriod, LocalDateTime finalPeriod, String trackingCsvKey)
+			throws IOException {
+		List<Tracking> todayTrackings = fetchFromPeriod(initialPeriod, finalPeriod);
+
+		File file = Files.createTempFile(trackingCsvKey, ".csv").toFile();
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+
+			generateTrackingCsv(writer, todayTrackings);
+
+			String fileName = trackingCsvKey + ".csv";
+
+			uploadTrackingCsv(fileName, file);
+			
+			String presignedForUrlTrackingCsv = getPresignedForUrlTrackingCsv(fileName);
+			return presignedForUrlTrackingCsv;
+		}
 	}
 	
 }

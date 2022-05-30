@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import br.com.claro.whatsapp.tracking.config.ObjectMapperConfig;
 import br.com.claro.whatsapp.tracking.config.S3Config;
 import br.com.claro.whatsapp.tracking.config.SqsConfig;
-import br.com.claro.whatsapp.tracking.service.AWSS3Service;
+import br.com.claro.whatsapp.tracking.service.aws.AWSS3Service;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")

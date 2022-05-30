@@ -1,16 +1,11 @@
 package br.com.claro.whatsapp.tracking.discord;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import br.com.claro.whatsapp.tracking.model.Tracking;
 import br.com.claro.whatsapp.tracking.service.TrackingService;
 
 @EnableAsync
@@ -55,22 +49,11 @@ public class TrackingSchedule {
 
 		String trackingCsvKey = "trackings_" + from + "_" + to;
 
-		List<Tracking> todayTrackings = service.fetchFromPeriod(startOfTheDay, endOfTheDay);
-
-		File file = Files.createTempFile(trackingCsvKey, ".csv").toFile();
-
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-
-			service.generateTrackingCsv(writer, todayTrackings);
-
-			String fileName = trackingCsvKey + ".csv";
-
-			service.uploadTrackingCsv(fileName, file);
-			
-			String presignedForUrlTrackingCsv = service.getPresignedForUrlTrackingCsv(fileName);
-			trackingBot.notifyNewTrackingReport(presignedForUrlTrackingCsv);
-		}
+		String presignedForUrlTrackingCsv = service.fetchTrackingsAndUploadFileToS3(startOfTheDay, endOfTheDay, trackingCsvKey);
+		trackingBot.notifyNewTrackingReport(presignedForUrlTrackingCsv);
 
 	}
+
+
 
 }

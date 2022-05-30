@@ -27,8 +27,8 @@ import br.com.claro.whatsapp.tracking.discord.TrackingSchedule;
 import br.com.claro.whatsapp.tracking.mapper.TrackingMapper;
 import br.com.claro.whatsapp.tracking.mapper.TrackingMapperImpl;
 import br.com.claro.whatsapp.tracking.persistence.repository.TrackingRepository;
-import br.com.claro.whatsapp.tracking.service.AWSS3Service;
 import br.com.claro.whatsapp.tracking.service.TrackingService;
+import br.com.claro.whatsapp.tracking.service.aws.AWSS3Service;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { ObjectMapperConfig.class, TrackingMapperImpl.class })

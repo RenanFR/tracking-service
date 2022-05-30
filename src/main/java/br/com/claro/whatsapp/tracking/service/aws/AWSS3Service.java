@@ -1,4 +1,4 @@
-package br.com.claro.whatsapp.tracking.service;
+package br.com.claro.whatsapp.tracking.service.aws;
 
 import java.io.File;
 import java.util.Calendar;
